@@ -37,7 +37,7 @@ const addDevice = async (event: any) => {
     // TODO: add logic to handle successful device creation
   } else {
     console.error(response.statusText);
-    // TODO: add logic to handle error
+    // TODO: add logic to handle error testtt
   }
 };
 </script>

@@ -12,7 +12,7 @@ const authStore = useAuthStore();
 const route = useRoute()
 const router = useRouter()
 let deviceId:any= ref([])
-
+//test
 onMounted(async ( ) => {
   console.log(authStore.token); // log the token value
   await router.isReady();
