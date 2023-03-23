@@ -3,6 +3,9 @@ import { ref, onMounted } from "vue";
 import { useAuthStore } from "@/stores/auth";
 
 const spaceList = ref([]);
+const FORM: any = ref({
+  onOff: 0  //standaard op uit ingesteld (placeholder)
+});
 const authStore = useAuthStore();
 
 onMounted(() => {
@@ -15,29 +18,17 @@ onMounted(() => {
       spaceList.value = apiSpaces;
     });
 });
-const addDevice = async (event) => {
+
+const addDevice = async (event: any) => {
   event.preventDefault(); // prevent form from submitting normally
-
-  const form = event.target;
-  const deviceName = form.name.value;
-  //console.log(deviceName);
-  const category = form.label.value;
-  const spaceId = form.space.value;
-  const onOff = form.onOff.value;
-
-  console.log(deviceName, category, spaceId, onOff);
+  console.log('FORM', JSON.stringify(FORM.value))
   const response = await fetch("http://localhost:9191/device/create", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${authStore.token}`,
     },
-    body: JSON.stringify({
-      naam: deviceName,
-      label: category,
-      onOff: onOff === "ON" ? 1 : 0, // convert to boolean value
-      space: { id: spaceId },
-    }),
+    body: JSON.stringify(FORM.value),
   });
 
   if (response.ok) {
@@ -72,6 +63,7 @@ const addDevice = async (event) => {
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="Type device name"
               required=""
+              v-model="FORM.naam"
             />
           </div>
           <div class="w-full">
@@ -87,6 +79,7 @@ const addDevice = async (event) => {
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="Device category"
               required=""
+              v-model="FORM.label"
             />
           </div>
 
@@ -97,16 +90,17 @@ const addDevice = async (event) => {
               >Space</label
             >
             <select
+              v-model="FORM.space"
               id="category"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
             >
-              <option selected="">Select a space</option>
+              <option selected="" v-bind:value="undefined">Select a space...</option>
 
               <option
                 v-for="space in spaceList"
                 :key="space.id"
                 :space="space"
-                value="{{ space.id }}"
+                v-bind:value="space"
               >
                 {{ space.id }}
               </option>
@@ -120,11 +114,12 @@ const addDevice = async (event) => {
               >ON or OFF</label
             >
             <select
+              v-model="FORM.onOff"
               id="onOff"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
             >
-              <option selected="" value="ON">ON</option>
-              <option selected="" value="OFF">OFF</option>
+              <option selected=""  v-bind:value="1">ON</option>
+              <option selected=""  v-bind:value="0">OFF</option>
             </select>
           </div>
         </div>

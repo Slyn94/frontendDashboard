@@ -4,6 +4,7 @@ import LoginView from "@/views/LoginView.vue";
 import DevicesView from "@/views/DevicesView.vue";
 import SpacesView from "@/views/SpacesView.vue";
 import NewDevice from "@/components/NewDevice.vue";
+import UpdateDevice from "@/components/UpdateDevice.vue";
 import DeleteMessage from "@/components/DeleteMessage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -29,6 +30,11 @@ const router = createRouter({
       path: "/devices/Newdevice",
       name: "NewDevices",
       component: NewDevice,
+    },
+    {
+      path: '/devices/updateDevice/:id',
+      name: 'UpdateDevice',
+      component: UpdateDevice
     },
     {
       path: "/spaces",
